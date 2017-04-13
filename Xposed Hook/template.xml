@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<template
+    format="5"
+    revision="3"
+    name="Xposed Hook"
+    description="Creates a new Xposed Hook.">
+
+    <category value="Xposed" />
+	
+    <parameter
+        id="hookName"
+        name="Hook's Name"
+        type="string"
+        constraints="class|unique|nonempty"
+        default="MyXposedHook" />
+		
+    <parameter
+        id="before"
+        name="Do something before hooked method"
+        type="boolean"
+        default="true" />
+		
+    <parameter
+        id="after"
+        name="Do something after hooked method"
+        type="boolean"
+        default="true" />	
+	
+    <parameter
+        id="premade"
+        name="Use Pre-made hook"
+        type="boolean"
+        default="false" />
+	
+	<parameter
+        id="hookType"
+        name="Premade Hook"
+        type="enum"
+		visibility="premade"
+        default="none">
+        <option id="none" default="true">None</option>
+		<option id="trace">Tracer</option>
+        <option id="net">GS_Net</option>
+	</parameter>
+	
+	    <parameter
+        id="packageName"
+        name="Package name"
+        type="string"
+        constraints="package"
+        default="com.mycompany.myapp" />
+
+    <globals file="globals.xml.ftl" />
+    <execute file="recipe.xml.ftl" />
+
+</template>

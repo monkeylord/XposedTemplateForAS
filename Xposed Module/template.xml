@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<template
+    format="5"
+    revision="3"
+    name="Xposed Module"
+    description="Creates a new Xposed Module and configure it to your Android project.">
+
+    <category value="Xposed" />
+
+	<parameter
+		id="moduleName"
+		name="Xposed Module Name"
+		type="string"
+		constraints="unique|nonempty"
+		default="XposedModule" />
+	<parameter
+		id="moduleDescription"
+		name="Xposed Module's Description"
+		type="string"
+		constraints="nonempty"
+		default="My Xposed Module" />
+	
+    <parameter
+        id="className"
+        name="Xposed Main Class Name"
+        type="string"
+        constraints="class|unique|nonempty"
+        default="MyXposed" />
+		
+    <parameter
+        id="specific"
+        name="Hook specific application"
+        type="boolean"
+        default="false" />
+		
+	<parameter
+        id="targetApp"
+        name="Application to hook"
+		help="copy packagename from target's AndroidManifest"
+        type="string"
+        visibility="specific"
+        default="" />
+		
+    <parameter
+        id="isEnhanced"
+        name="Enhanced"
+        type="boolean"
+        default="false"
+        help="Additional Support from Bangcle Code" />
+	
+    <thumbs>
+        <thumb>template_xposed_module.png</thumb>
+    </thumbs>
+	
+    <globals file="globals.xml.ftl" />
+    <execute file="recipe.xml.ftl" />
+
+</template>
