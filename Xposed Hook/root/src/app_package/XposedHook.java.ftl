@@ -20,7 +20,7 @@ public class ${hookName} extends XC_MethodHook {
     private Object result = null;	//方法被调用后的返回结果
     @Override
     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-        super.beforeHookedMethod(param);
+		gatherInfo(param);
         //Write your code here.
 <#if hookType == "trace">
         XposedBridge.log("Method:" + method.getName().toString());
@@ -42,7 +42,7 @@ public class ${hookName} extends XC_MethodHook {
 
     @Override
     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-        super.afterHookedMethod(param);
+        gatherInfo(param);
         result=param.getResult();
         //Write your code here.
 		
