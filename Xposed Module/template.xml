@@ -40,13 +40,6 @@
         type="string"
         visibility="specific"
         default="" />
-		
-    <parameter
-        id="isEnhanced"
-        name="Enhanced"
-        type="boolean"
-        default="false"
-        help="Additional Support from Bangcle Code" />
 	
     <thumbs>
         <thumb>template_xposed_module.png</thumb>
