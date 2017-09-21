@@ -23,9 +23,14 @@ public class ${hookName} extends XC_MethodHook {
 		gatherInfo(param);
         //Write your code here.
 <#if hookType == "trace">
-        XposedBridge.log("Method:" + method.getName().toString());
-        for (Object arg:args) {
-            XposedBridge.log("  Arg:"+arg.toString());
+        XposedBridge.log("<"+method.getDeclaringClass()+" method="+MethodDescription(param).toString()+">");
+        try {
+            for (int i=0;i<args.length;i++) {
+                XposedBridge.log("<Arg index="+ i + ">" + translate(args[i])+"</Arg>");
+            }
+        }catch (Throwable e){
+            XposedBridge.log("<Error>"+e.getLocalizedMessage()+"</Error>");
+        }finally {
         }
 </#if>
 <#if hookType == "net">
@@ -47,8 +52,13 @@ public class ${hookName} extends XC_MethodHook {
         //Write your code here.
 		
 <#if hookType == "trace">
-        XposedBridge.log("Method:"+method.getName().toString());
-        XposedBridge.log("  Result:"+result.toString());
+        try {
+            XposedBridge.log("<Result>" + translate(result)+"</Result>");
+        }catch (Throwable e){
+            XposedBridge.log("<Error>"+e.getLocalizedMessage()+"</Error>");
+        }finally {
+            XposedBridge.log("</"+method.getDeclaringClass()+" method="+MethodDescription(param).toString()+">");
+        }
 </#if>
 <#if hookType == "net">
         //TODO Override this with your own handler
@@ -61,7 +71,30 @@ public class ${hookName} extends XC_MethodHook {
 		
 		
     }
-
+<#if hookType == "trace">
+    private void log(String log){
+        //You can add your own logger here.
+        //e.g filelogger like Xlog.log(log);
+        XposedBridge.log(log);
+    }
+    private String MethodDescription(MethodHookParam param){
+        StringBuilder sb=new StringBuilder();
+        sb.append(method.getName().toString());
+        sb.append("(");
+        for (Object arg:args) {
+            if(arg==null)sb.append("UnknownType");
+            else if(arg.getClass().isPrimitive())sb.append(arg.getClass().getSimpleName());
+            else sb.append(arg.getClass().getName());
+            sb.append(",");
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+    private String translate(Object obj){
+        //Write your translator here.
+        return obj.toString();
+    }
+</#if>
     public void hook(Member method){
         XposedBridge.hookMethod(method, this);
     }

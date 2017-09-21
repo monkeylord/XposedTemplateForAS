@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<template
+    format="5"
+    revision="3"
+    name="Timing"
+    description="Several timings to execute code">
+
+    <category value="Xposed" />
+	
+	<parameter
+	id="packageName"
+	name="Package name"
+	type="string"
+	constraints="package"
+	default="com.mycompany.myapp" />
+
+    <globals file="globals.xml.ftl" />
+    <execute file="recipe.xml.ftl" />
+
+</template>
