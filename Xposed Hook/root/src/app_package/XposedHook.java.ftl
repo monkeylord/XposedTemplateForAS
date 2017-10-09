@@ -18,18 +18,21 @@ public class ${hookName} extends XC_MethodHook {
     public Object thisObject;		//方法被调用时的this对象
     public Object[] args;			//方法被调用时的参数
     private Object result = null;	//方法被调用后的返回结果
+<#if hookType == "net">
+	String server="http://192.168.1.1:8000";//注意：将此处改为PC端IP与端口
+</#if>
     @Override
     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 		gatherInfo(param);
         //Write your code here.
 <#if hookType == "trace">
-        XposedBridge.log("<"+method.getDeclaringClass()+" method="+MethodDescription(param).toString()+">");
+        log("<"+method.getDeclaringClass()+" method="+MethodDescription(param).toString()+">");
         try {
             for (int i=0;i<args.length;i++) {
-                XposedBridge.log("<Arg index="+ i + ">" + translate(args[i])+"</Arg>");
+                log("<Arg index="+ i + ">" + translate(args[i])+"</Arg>");
             }
         }catch (Throwable e){
-            XposedBridge.log("<Error>"+e.getLocalizedMessage()+"</Error>");
+            log("<Error>"+e.getLocalizedMessage()+"</Error>");
         }finally {
         }
 </#if>
@@ -53,11 +56,11 @@ public class ${hookName} extends XC_MethodHook {
 		
 <#if hookType == "trace">
         try {
-            XposedBridge.log("<Result>" + translate(result)+"</Result>");
+            log("<Result>" + translate(result)+"</Result>");
         }catch (Throwable e){
-            XposedBridge.log("<Error>"+e.getLocalizedMessage()+"</Error>");
+            log("<Error>"+e.getLocalizedMessage()+"</Error>");
         }finally {
-            XposedBridge.log("</"+method.getDeclaringClass()+" method="+MethodDescription(param).toString()+">");
+            log("</"+method.getDeclaringClass()+" method="+MethodDescription(param).toString()+">");
         }
 </#if>
 <#if hookType == "net">
