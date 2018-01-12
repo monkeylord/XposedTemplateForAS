@@ -1,4 +1,5 @@
 #/usr/bin/python
+# -*- coding: utf-8 -*-
 import sys
 import BaseHTTPServer  
 from BaseHTTPServer import BaseHTTPRequestHandler
@@ -6,11 +7,11 @@ from BaseHTTPServer import BaseHTTPRequestHandler
 """
 搭配GS_Net使用的服务端代码
 简单的将请求体原样返回，以便通过Burp进行修改
-使用方式：python local-http-server.py [端口]
+使用方式：python2 local-http-server.py [端口]
 
 This is a server that cooperates with GS_Net.
 It simplely send request body back, so you can intercept it with Burp.
-Usage: python local-http-server.py [port]
+Usage: python2 local-http-server.py [port]
 """
 
 ServerClass = BaseHTTPServer.HTTPServer
