@@ -71,27 +71,27 @@ public class Timing {
 
                     })
             );
-            unhooks.put("onApplicationAttach"
+            unhooks.put("onAttachBaseContext"
                     , XposedBridge.hookMethod(XposedHelpers
-                                    .findClass("android.app.Application", loadPackageParam.classLoader)
-                                    .getDeclaredMethod("Attach"
+                                    .findClass("android.content.ContextWrapper", loadPackageParam.classLoader)
+                                    .getDeclaredMethod("attachBaseContext"
                                             , Context.class)
                             , new XC_MethodHook() {
                                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                                    if (isOnce) unhooks.remove("onApplicationAttach").unhook();
-                                    onApplicationAttach((Context) param.args[0]);
+                                    if (isOnce) unhooks.remove("onAttachBaseContext").unhook();
+                                    onAttachBaseContext((Context) param.args[0]);
                                 }
                             })
             );
-            unhooks.put("afterApplicationAttach"
+            unhooks.put("afterAttachBaseContext"
                     , XposedBridge.hookMethod(XposedHelpers
-                                    .findClass("android.app.Application", loadPackageParam.classLoader)
-                                    .getDeclaredMethod("Attach"
+                                    .findClass("android.content.ContextWrapper", loadPackageParam.classLoader)
+                                    .getDeclaredMethod("attachBaseContext"
                                             , Context.class)
                             , new XC_MethodHook() {
                                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                                    if (isOnce) unhooks.remove("afterApplicationAttach").unhook();
-                                    afterApplicationAttach((Context) param.args[0]);
+                                    if (isOnce) unhooks.remove("afterAttachBaseContext").unhook();
+                                    afterAttachBaseContext((Context) param.args[0]);
                                 }
                             })
             );			
@@ -103,6 +103,6 @@ public class Timing {
     protected void afterNewActivity(Activity activity){}
     protected void onNewApplication(Application application){}
     protected void afterNewApplication(Application application){}
-    protected void onApplicationAttach(Context context) {}
-    protected void afterApplicationAttach(Context context) {}
+    protected void onAttachBaseContext(Context context) {}
+    protected void afterAttachBaseContext(Context context) {}
 }
