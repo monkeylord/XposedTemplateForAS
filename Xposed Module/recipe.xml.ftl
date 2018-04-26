@@ -3,17 +3,27 @@
 
     <merge from="root/AndroidManifest.xml.ftl"
              to="${escapeXmlAttribute(manifestOut)}/AndroidManifest.xml" />
+			 
     <mkdir at="${escapeXmlAttribute(projectOut)}/libs" />
+	
 	<copy from="root/lib"
 		to="${escapeXmlAttribute(projectOut)}/lib" />
+		
     <merge from="root/build.gradle.ftl"
              to="${escapeXmlAttribute(projectOut)}/build.gradle" />
 	
 	<mkdir at="${escapeXmlAttribute(manifestOut)}/assets/" />
+	
 	<instantiate from="root/xposed_init.ftl"
 			   to="${escapeXmlAttribute(manifestOut)}/assets/xposed_init" />
 				   
     <instantiate from="root/src/app_package/XposedModule.java.ftl"
                    to="${escapeXmlAttribute(srcOut)}/${className}.java" />
+				   
     <open file="${escapeXmlAttribute(srcOut)}/${className}.java" />
+	
+<#if select == "selector">
+    <instantiate from="root/src/app_package/Selector.java.ftl"
+                   to="${escapeXmlAttribute(srcOut)}/${className}Selector.java" />
+</#if>
 </recipe>

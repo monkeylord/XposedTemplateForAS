@@ -13,6 +13,16 @@
             android:name="xposeddescription"
             android:value="${moduleDescription}"
             />
+<#if select == "selector">
+        <activity 
+			android:name=".${className}Selector"
+			android:label="${moduleName}\n AppSelector">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+</#if>
     </application>
 
 </manifest>

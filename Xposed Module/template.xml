@@ -28,17 +28,21 @@
         default="MyXposed" />
 		
     <parameter
-        id="specific"
-        name="Hook specific application"
-        type="boolean"
-        default="false" />
+        id="select"
+        name="Which App Should It Hook?"
+        type="enum"
+        default="all">
+        <option id="all" default="true">Hook All</option>
+		<option id="specify">Specify</option>
+        <option id="selector">Use Selector Activity</option>	
+	</parameter>
 		
 	<parameter
         id="targetApp"
-        name="Application to hook"
+        name="Please Specify App"
 		help="copy packagename from target's AndroidManifest"
         type="string"
-        visibility="specific"
+        visibility="select==&quot;specify&quot;"
         default="" />
 	
     <thumbs>
