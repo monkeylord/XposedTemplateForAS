@@ -44,7 +44,13 @@
         type="string"
         visibility="select==&quot;specify&quot;"
         default="" />
-	
+		
+	<parameter
+        id="packageName"
+        name="Package name"
+        type="string"
+        constraints="package"
+        default="com.mycompany.myapp" />
     <thumbs>
         <thumb>template_xposed_module.png</thumb>
     </thumbs>
