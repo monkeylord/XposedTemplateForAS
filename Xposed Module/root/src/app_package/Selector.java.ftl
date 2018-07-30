@@ -127,7 +127,7 @@ public class ${className}Selector extends Activity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             RelativeLayout relativeLayout=new RelativeLayout(context);
-            relativeLayout.setLayoutParams(new LinearLayout.LayoutParams(
+            relativeLayout.setLayoutParams(new AbsListView.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
             ImageView iv=new ImageView(context);
