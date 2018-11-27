@@ -3,10 +3,14 @@ package ${packageName};
 import java.lang.reflect.Member;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
+import java.util.Map;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
+<#if hookType == "net">
+import fi.iki.elonen.NanoHTTPD;
+</#if>
 
 /**
  * Hook's type: ${hookType}
@@ -21,7 +25,17 @@ public class ${hookName} extends XC_MethodHook {
     public Object[] args;			//方法被调用时的参数
     private Object result = null;	//方法被调用后的返回结果
 <#if hookType == "net">
-	String server="http://192.168.1.1:8000";//注意：将此处改为PC端IP与端口
+    int port;
+    String server;
+	
+    public MyXposedHook() {
+        this(6666);
+    }
+    ${hookName}(int port){
+        if(port!=0)this.port=port;
+        server = "http://127.0.0.1:"+ port;
+        new Server(this.port);
+    }
 </#if>
     @Override
     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -153,4 +167,23 @@ public class ${hookName} extends XC_MethodHook {
         thisObject=param.thisObject;
         args=param.args;
     }
+<#if hookType == "net">
+	class Server extends NanoHTTPD {
+        public Server(int port) {
+            super(port);
+            try {
+                start(0, false);
+                XposedBridge.log("${hookName} Listening on " + port);
+            } catch (Exception e) 
+            {
+                XposedBridge.log("${hookName} Fail Listening on " + port);
+                e.printStackTrace();
+            }
+        }
+        @Override
+        public Response serve(String uri, Method method, Map<String, String> headers, Map<String, String> parms, Map<String, String> files) {
+            return NanoHTTPD.newFixedLengthResponse(files.get("postData"));
+        }
+    }
+</#if>
 }

@@ -5,8 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.URI;
 import java.net.URL;
-
+import java.util.List;
 
 /**
  * Created by secneo on 2017/3/6.
@@ -51,10 +54,13 @@ public class netUtil extends Thread{
     }
     private void doPost(){
         try {
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            List<Proxy> proxys = ProxySelector.getDefault().select(new URI("http://www.baidu.com"));
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection((proxys.size()>0)?proxys.get(0): Proxy.NO_PROXY);
             httpURLConnection.setRequestMethod("POST");// 提交模式
+			httpURLConnection.setRequestProperty("Content-Type","application/json; charset=utf-8");
+			httpURLConnection.setRequestProperty("Tips:","Use 'adb forward tcp:"+httpURLConnection.getURL().getPort()+" tcp:"+httpURLConnection.getURL().getPort()+"' to forward this request");
             httpURLConnection.setConnectTimeout(10000);//连接超时 单位毫秒
-            httpURLConnection.setReadTimeout(2000);//读取超时 单位毫秒
+            //httpURLConnection.setReadTimeout(2000);//读取超时 单位毫秒
             // 发送POST请求必须设置如下两行
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
