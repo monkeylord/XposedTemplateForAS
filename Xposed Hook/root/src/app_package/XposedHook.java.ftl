@@ -28,7 +28,7 @@ public class ${hookName} extends XC_MethodHook {
     int port;
     String server;
 	
-    public MyXposedHook() {
+    public ${hookName}() {
         this(6666);
     }
     ${hookName}(int port){
