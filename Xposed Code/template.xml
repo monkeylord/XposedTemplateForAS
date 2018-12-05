@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<template
+    format="5"
+    revision="3"
+    name="Xposed Extend Code"
+    description="Some mature code.">
+
+    <category value="Xposed" />
+		
+    <parameter
+        id="SocketProxy"
+        name="Build Socks5 Proxy with hooked VPNSocket to break though VPN"
+        type="boolean"
+        default="false" />
+		
+    <parameter
+        id="ClassesEnum"
+        name="A little trick to get ALL classes loaded."
+        type="boolean"
+        default="false" />	
+	
+	<parameter
+        id="packageName"
+        name="Package name"
+        type="string"
+        constraints="package"
+        default="com.mycompany.myapp" />
+
+    <globals file="globals.xml.ftl" />
+    <execute file="recipe.xml.ftl" />
+
+</template>
