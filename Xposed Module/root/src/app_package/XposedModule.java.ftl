@@ -1,8 +1,10 @@
 package ${packageName};
 
 import android.content.pm.ApplicationInfo;
+import android.os.Build;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 <#if select == "selector">
@@ -19,27 +21,33 @@ import java.util.regex.Pattern;
 	https://developer.android.com/studio/run/#disable-ir
 */
 
-public class ${className} implements IXposedHookLoadPackage {
+public class ${className} implements IXposedHookLoadPackage<#if select == "selector">, IXposedHookZygoteInit</#if> {
 
 	<#if select == "specify">
 	String targetApp="${targetApp}";
 	<#elseif select == "selector">
-	String targetApp=new XSharedPreferences(this.getClass().getPackage().getName(),"${className}Selector").getString("hookee","${targetApp}");
-	boolean isReg=new XSharedPreferences(this.getClass().getPackage().getName(),"${className}Selector").getBoolean("isReg",false);
+    public static XSharedPreferences sPrefs;
+	String targetApp;
+	boolean isReg;
 	</#if>
     String packageName;
     Boolean isFirstApplication;
     ClassLoader classLoader;
     String processName;
     ApplicationInfo appInfo;
-	
+    
 	@Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
 		<#if select == "specify">
 		if(!loadPackageParam.packageName.equals(targetApp))return;
 		<#elseif select == "selector">
-		if (loadPackageParam.packageName.equals("${packageName}"))
+        sPrefs.reload();
+        targetApp = sPrefs.getString("hookee","${targetApp}");
+        isReg = sPrefs.getBoolean("isReg",false);
+		if (loadPackageParam.packageName.equals("${packageName}")){
 			XposedHelpers.findAndHookMethod("${packageName}.${className}Selector", loadPackageParam.classLoader, "isModuleActive", XC_MethodReplacement.returnConstant(true));
+            if(Build.VERSION.SDK_INT>=26)XposedHelpers.findAndHookMethod("android.app.ContextImpl", loadPackageParam.classLoader, "checkMode", int.class, XC_MethodReplacement.returnConstant(null));
+        }
 		if(!shouldHook(loadPackageParam.packageName))return;
 		</#if>
 		gatherInfo(loadPackageParam);
@@ -48,6 +56,13 @@ public class ${className} implements IXposedHookLoadPackage {
 		
 		
     }
+    <#if select == "selector">
+    @Override
+    public void initZygote(StartupParam startupParam) throws Throwable {
+        sPrefs = new XSharedPreferences(this.getClass().getPackage().getName(),"${className}Selector");
+        sPrefs.makeWorldReadable();
+    }
+    </#if>
     private void gatherInfo(XC_LoadPackage.LoadPackageParam loadPackageParam){
         packageName=loadPackageParam.packageName;
         isFirstApplication=loadPackageParam.isFirstApplication;

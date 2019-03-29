@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.List;
 
 public class ${className}Selector extends Activity {
@@ -38,7 +39,8 @@ public class ${className}Selector extends Activity {
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         layout.setOrientation(LinearLayout.VERTICAL);
         super.setContentView(layout,param);
-        sp=getPreferences(MODE_WORLD_READABLE);
+        sp=getPreferences(isModuleActive()?MODE_WORLD_READABLE:MODE_PRIVATE);
+        makeWorldReadable();
         hookee=sp.getString("hookee","com.");
         isReg=sp.getBoolean("isReg",false);
         final AppAdapter appAdapter=new AppAdapter(this);
@@ -95,6 +97,10 @@ public class ${className}Selector extends Activity {
     }
     private static boolean isModuleActive() {
         return false;
+    }
+    public void makeWorldReadable(){
+        new File("/data/data/" + ${className}Selector.class.getPackage().getName().toLowerCase()).setExecutable(true, false);
+        new File("/data/data/" + ${className}Selector.class.getPackage().getName().toLowerCase() + "/shared_prefs/${className}Selector.xml").setReadable(true, false);
     }
     public void update(){
         SharedPreferences.Editor editor=sp.edit();
